@@ -1,0 +1,174 @@
+---
+import Container from '../ui/Container.astro';
+
+const categories = [
+  {
+    name: 'Autos',
+    description: 'Explorá las unidades publicadas.',
+    image: '/images/vehicles/auto-1/auto1-2.jpg',
+    imageAlt: 'Auto disponible en Gargol Cars',
+  },
+  {
+    name: 'Pickups',
+    description: 'Conocé las opciones publicadas.',
+    image: '/images/vehicles/auto-3/auto3-2.jpg',
+    imageAlt: 'Pickup disponible en Gargol Cars',
+  },
+  {
+    name: 'Motos',
+    description: 'Conocé las unidades publicadas.',
+    image: '/images/vehicles/moto-1/moto1-2.jpg',
+    imageAlt: 'Moto Benelli publicada por Gargol Cars',
+  },
+] as const;
+---
+
+<section
+  class="surface-ink section-atmosphere relative isolate overflow-hidden py-[var(--section-space-tight)]"
+  aria-labelledby="categories-title"
+>
+  <span class="section-separator" aria-hidden="true"></span>
+  <img
+    src="/images/brand/isotipo-blanco.png"
+    alt=""
+    width="1080"
+    height="1080"
+    loading="lazy"
+    aria-hidden="true"
+    class="pointer-events-none absolute -top-32 -right-36 z-0 w-[34rem] max-w-none object-contain opacity-[0.025] sm:-right-24 lg:w-[44rem]"
+  />
+  <Container class="relative z-10">
+    <div class="max-w-3xl" data-section-heading>
+      <p class="section-eyebrow">
+        Categorías
+      </p>
+      <h2
+        id="categories-title"
+        class="section-title"
+      >
+        Encontrá una opción para vos
+      </h2>
+      <p class="section-lead">
+        Trabajamos con autos, pickups y motos. Consultanos para conocer las opciones
+        disponibles.
+      </p>
+    </div>
+
+    <div
+      class="category-track -mx-4 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0 lg:mt-14 lg:gap-5"
+    >
+      {
+        categories.map((category) => (
+          <a
+            href="#vehiculos"
+            class="category-card group relative aspect-[4/3] w-[86vw] max-w-[24rem] shrink-0 snap-start overflow-hidden rounded-[var(--radius-editorial)] border border-[var(--color-border)] bg-[var(--color-surface)] sm:w-auto sm:max-w-none"
+          >
+            {
+              category.name === 'Motos' && (
+                <img
+                  src={category.image}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  aria-hidden="true"
+                  class="category-card__backdrop absolute inset-0 scale-110 object-cover object-center brightness-[0.32] saturate-[0.75] blur-xl"
+                  style="width: 100%; height: 100%;"
+                />
+              )
+            }
+            {category.image ? (
+              <img
+                src={category.image}
+                alt={category.imageAlt}
+                loading="lazy"
+                decoding="async"
+                class:list={[
+                  'category-card__image absolute inset-0 h-full w-full',
+                  category.name === 'Motos'
+                    ? 'z-[1] object-contain object-center p-2 sm:p-3'
+                    : 'object-cover',
+                ]}
+                style={`width: 100%; height: 100%; object-position: ${
+                  category.name === 'Autos'
+                    ? '50% 58%'
+                    : category.name === 'Pickups'
+                      ? '50% 55%'
+                      : '50% 50%'
+                }`}
+              />
+            ) : (
+              <div
+                class="absolute inset-0 grid place-items-center bg-[radial-gradient(circle_at_30%_20%,rgba(233,87,36,0.28),transparent_45%),repeating-linear-gradient(135deg,rgba(255,255,255,0.035)_0_1px,transparent_1px_12px),var(--color-surface)]"
+                aria-hidden="true"
+              >
+                <img
+                  src="/images/brand/isotipo-blanco.png"
+                  alt=""
+                  width="1080"
+                  height="1080"
+                  loading="lazy"
+                  class="w-48 object-contain opacity-20"
+                />
+              </div>
+            )}
+
+            <span
+              class="absolute inset-0 z-[2] bg-[linear-gradient(180deg,transparent_32%,rgba(0,0,0,0.18)_54%,rgba(0,0,0,0.94)_100%)]"
+              aria-hidden="true"
+            >
+            </span>
+
+            <span class="absolute right-0 bottom-0 left-0 z-[3] p-5 sm:p-6">
+              <span
+                class="block text-[0.68rem] font-bold tracking-[0.2em] text-[var(--color-brand-orange)] uppercase"
+              >
+                Ver categoría
+              </span>
+              <span class="mt-2 block text-[clamp(1.75rem,3vw,2.5rem)] leading-none font-bold tracking-[-0.035em] text-white">
+                {category.name}
+              </span>
+              <span class="mt-2 block text-sm leading-6 text-white/70">
+                {category.description}
+              </span>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </Container>
+</section>
+
+<style>
+  .category-track {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .category-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-card__backdrop,
+  .category-card__image {
+    width: 100%;
+    height: 100%;
+  }
+
+  .category-card,
+  .category-card__image {
+    transition:
+      transform var(--transition-base) var(--ease-premium),
+      border-color var(--transition-base) ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .category-card:hover {
+      border-color: var(--color-border-strong);
+      transform: translateY(-4px);
+    }
+
+    .category-card:hover .category-card__image {
+      transform: scale(1.025);
+    }
+  }
+</style>

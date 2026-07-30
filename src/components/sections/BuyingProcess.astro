@@ -1,0 +1,58 @@
+---
+import Container from '../ui/Container.astro';
+
+const steps = [
+  'Elegí una unidad o contanos qué buscás.',
+  'Consultá disponibilidad, financiación y permuta.',
+  'Coordiná para conocer el vehículo.',
+] as const;
+---
+
+<section
+  class="surface-graphite relative overflow-hidden py-[var(--section-space-tight)]"
+  aria-labelledby="process-title"
+>
+  <span class="section-separator" aria-hidden="true"></span>
+  <Container>
+    <div class="max-w-3xl" data-section-heading>
+      <p class="section-eyebrow">
+        Proceso de compra
+      </p>
+      <h2
+        id="process-title"
+        class="section-title"
+      >
+        Tres pasos para empezar
+      </h2>
+    </div>
+
+    <ol class="mt-10 border-y border-[var(--color-border)] md:mt-14 md:grid md:grid-cols-3">
+      {
+        steps.map((step, index) => (
+          <li
+            class:list={[
+              'relative grid min-h-[15rem] grid-cols-[auto_1fr] gap-5 overflow-hidden py-7 sm:min-h-[17rem] sm:py-9 md:block md:px-7',
+              index < steps.length - 1 &&
+                'border-b border-[var(--color-border)] md:border-r md:border-b-0',
+            ]}
+          >
+            <span
+              aria-hidden="true"
+              class="text-[clamp(3.5rem,7vw,6.5rem)] leading-[0.8] font-bold tracking-[-0.08em] text-white/[0.09]"
+            >
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            <div class="md:mt-12">
+              <span class="meta-label text-[var(--color-brand-orange)]">
+                Paso {String(index + 1).padStart(2, '0')}
+              </span>
+              <p class="relative mt-3 max-w-sm text-xl leading-8 font-semibold tracking-[-0.015em] text-[var(--color-text-primary)]">
+                {step}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </Container>
+</section>

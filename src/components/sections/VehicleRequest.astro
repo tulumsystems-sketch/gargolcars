@@ -1,0 +1,125 @@
+---
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+
+const fieldClasses =
+  'min-h-12 w-full rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface-soft)] px-4 text-base text-[var(--color-text-primary)] placeholder:text-[var(--color-text-secondary)] transition-colors duration-200 hover:border-[var(--color-border-strong)] focus:border-[var(--color-brand-orange)] focus:bg-[var(--color-bg-primary)] focus:outline-none';
+---
+
+<section
+  id="solicitud"
+  class="surface-graphite section-atmosphere relative isolate scroll-mt-[var(--header-height)] overflow-hidden py-[var(--section-space)]"
+  aria-labelledby="vehicle-request-title"
+>
+  <span class="section-separator" aria-hidden="true"></span>
+  <Container class="relative z-10">
+    <div class="grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:items-start lg:gap-20">
+      <div class="lg:pt-8" data-section-heading>
+        <p class="section-eyebrow">
+          Búsqueda personalizada
+        </p>
+        <h2
+          id="vehicle-request-title"
+          class="section-title"
+        >
+          ¿No encontraste lo que buscabas?
+        </h2>
+        <p class="section-lead max-w-lg">
+          Contanos qué tipo de vehículo necesitás y continuá la consulta directamente
+          por WhatsApp.
+        </p>
+      </div>
+
+      <form
+        class="relative grid gap-x-5 gap-y-6 border-y border-[var(--color-border)] py-7 sm:grid-cols-2 sm:py-9"
+        aria-describedby="vehicle-request-status"
+        data-vehicle-request
+        novalidate
+      >
+        <label class="grid gap-2 text-sm font-semibold text-[var(--color-text-primary)]">
+          Nombre
+          <input
+            id="vehicle-request-name"
+            name="name"
+            type="text"
+            autocomplete="name"
+            required
+            aria-required="true"
+            aria-describedby="vehicle-request-status"
+            class={fieldClasses}
+          />
+        </label>
+
+        <label class="grid gap-2 text-sm font-semibold text-[var(--color-text-primary)]">
+          Tipo de vehículo
+          <select
+            id="vehicle-request-type"
+            name="vehicleType"
+            required
+            aria-required="true"
+            aria-describedby="vehicle-request-status"
+            class={fieldClasses}
+          >
+            <option value="">Seleccioná una opción</option>
+            <option value="car">Auto</option>
+            <option value="pickup">Pickup</option>
+            <option value="motorcycle">Moto</option>
+          </select>
+        </label>
+
+        <label class="grid gap-2 text-sm font-semibold text-[var(--color-text-primary)]">
+          Marca o modelo buscado
+          <input
+            id="vehicle-request-model"
+            name="brandOrModel"
+            type="text"
+            class={fieldClasses}
+          />
+        </label>
+
+        <label class="grid gap-2 text-sm font-semibold text-[var(--color-text-primary)]">
+          Presupuesto aproximado
+          <input
+            id="vehicle-request-budget"
+            name="estimatedBudget"
+            type="text"
+            inputmode="numeric"
+            class={fieldClasses}
+          />
+        </label>
+
+        <label
+          class="grid gap-2 text-sm font-semibold text-[var(--color-text-primary)] sm:col-span-2"
+        >
+          ¿Entrega otro vehículo?
+          <select
+            id="vehicle-request-trade-in"
+            name="hasTradeIn"
+            class={fieldClasses}
+          >
+            <option value="">Seleccioná una opción</option>
+            <option value="yes">Sí</option>
+            <option value="no">No</option>
+            <option value="unsure">A definir</option>
+          </select>
+        </label>
+
+        <div class="border-t border-[var(--color-border)] pt-6 sm:col-span-2">
+          <p
+            id="vehicle-request-status"
+            class="mb-4 text-sm leading-6 text-[var(--color-text-secondary)]"
+            aria-live="polite"
+            aria-atomic="true"
+            data-vehicle-request-status
+          >
+            Al continuar, se abrirá WhatsApp con los datos ingresados. No almacenamos
+            esta información.
+          </p>
+          <Button type="submit" class="min-h-12 w-full">
+            Quiero que me asesoren
+          </Button>
+        </div>
+      </form>
+    </div>
+  </Container>
+</section>

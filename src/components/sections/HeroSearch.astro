@@ -1,0 +1,345 @@
+---
+import { vehicles } from '../../data/vehicles';
+import { formatVehiclePrice } from '../../utils/vehicle';
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+
+const MINIMUM_SEARCH_BUDGET = 10_000_000;
+const brands = [...new Set(vehicles.map((vehicle) => vehicle.brand))].sort(
+  (firstBrand, secondBrand) => firstBrand.localeCompare(secondBrand, 'es'),
+);
+const models = [...new Set(vehicles.map((vehicle) => vehicle.model))].sort(
+  (firstModel, secondModel) =>
+    firstModel.localeCompare(secondModel, 'es', { numeric: true }),
+);
+// TEMPORAL: reemplazar por precios confirmados antes de publicar
+const availablePrices = vehicles
+  .filter((vehicle) => vehicle.status !== 'sold')
+  .map((vehicle) => vehicle.price)
+  .filter(
+    (price): price is number =>
+      price !== undefined && Number.isFinite(price) && price >= 0,
+  );
+const budgetMin = MINIMUM_SEARCH_BUDGET;
+const budgetMax = Math.max(budgetMin, ...availablePrices);
+
+const capabilities = [
+  'Autos',
+  'Pickups',
+  'Motos',
+  'Financiación',
+  'Permutas',
+] as const;
+---
+
+<section
+  id="inicio"
+  class="surface-ink relative isolate min-h-[max(46rem,100svh)] scroll-mt-[var(--header-height)] overflow-hidden"
+  aria-labelledby="hero-title"
+  data-hero
+>
+  <div
+    class="absolute inset-0 -z-30 bg-[radial-gradient(circle_at_50%_20%,#25201d_0%,var(--color-bg-primary)_64%)]"
+  >
+  </div>
+
+  <div
+    class="hero-media hero-media--left absolute inset-y-0 left-0 -z-20 hidden w-[58%] md:block"
+    data-hero-media="left"
+  >
+    <img
+      src="/images/hero/auto-izquierda.jpg"
+      alt=""
+      width="1376"
+      height="1835"
+      aria-hidden="true"
+      loading="lazy"
+      decoding="async"
+      class="h-full w-full object-cover object-[52%_64%] opacity-90"
+    />
+  </div>
+
+  <div
+    class="hero-media hero-media--right absolute top-0 right-0 left-0 -z-20 h-[min(68svh,42rem)] md:inset-y-0 md:left-auto md:h-auto md:w-[58%]"
+    data-hero-media="right"
+  >
+    <img
+      src="/images/hero/auto-derecha.jpg"
+      alt=""
+      width="1376"
+      height="1835"
+      aria-hidden="true"
+      fetchpriority="high"
+      decoding="async"
+      class="h-full w-full object-cover object-[60%_64%] opacity-85 md:object-[48%_60%] md:opacity-90"
+    />
+  </div>
+
+  <div
+    class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(9,10,11,0.2)_0%,rgba(9,10,11,0.48)_34%,rgba(9,10,11,0.94)_65%,var(--color-bg-primary)_80%)] md:bg-[radial-gradient(ellipse_at_50%_47%,rgba(9,10,11,0.9)_0%,rgba(9,10,11,0.74)_24%,rgba(9,10,11,0.34)_50%,rgba(9,10,11,0.04)_76%)]"
+  >
+  </div>
+  <div
+    class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(9,10,11,0.68)_0%,transparent_18%,transparent_72%,rgba(9,10,11,0.96)_100%)]"
+    aria-hidden="true"
+  >
+  </div>
+
+  <Container
+    class="relative z-10 flex min-h-[max(46rem,100svh)] items-start pt-[calc(var(--header-height)+clamp(3rem,8svh,5.5rem))] pb-8 md:items-center md:pt-[calc(var(--header-height)+2rem)] md:pb-12"
+  >
+    <div class="mx-auto w-full max-w-5xl text-center" data-hero-content>
+      <p
+        class="mb-3 text-[0.7rem] font-bold tracking-[0.3em] text-[var(--color-brand-orange)] uppercase md:mb-4 md:text-xs"
+        data-hero-eyebrow
+      >
+        Gargol Cars
+      </p>
+      <h1
+        id="hero-title"
+        class="mx-auto max-w-[12ch] text-[length:var(--font-size-hero)] leading-[0.94] font-bold tracking-[-0.055em] text-balance text-[var(--color-text-primary)]"
+        data-hero-title
+      >
+        Tenemos el vehículo que <span class="text-[var(--color-brand-orange)]"
+          >se adapta a vos</span
+        >
+      </h1>
+      <p
+        class="mx-auto mt-5 max-w-[36rem] text-base leading-7 text-pretty text-white/70 md:mt-6 md:text-lg"
+        data-hero-description
+      >
+        Explorá opciones según la marca, el modelo y tu presupuesto. Después podrás
+        consultar cada unidad directamente con nuestro equipo.
+      </p>
+
+      <ul
+        class="mx-auto mt-5 flex max-w-2xl flex-wrap justify-center gap-x-4 gap-y-2"
+        aria-label="Opciones disponibles"
+        data-hero-capabilities
+      >
+        {
+          capabilities.map((capability) => (
+            <li class="border-b border-white/15 px-0.5 py-1 text-[0.7rem] font-semibold tracking-[0.08em] text-white/65 uppercase">
+              {capability}
+            </li>
+          ))
+        }
+      </ul>
+
+      <form
+        class="relative mx-auto mt-7 max-w-4xl overflow-hidden rounded-[var(--radius-editorial)] border border-white/[0.14] bg-[color:var(--color-surface-soft)]/[0.88] p-4 text-left shadow-[0_24px_70px_rgba(0,0,0,0.42)] backdrop-blur-2xl sm:mt-9 sm:p-5 lg:p-6"
+        aria-label="Búsqueda visual de vehículos"
+        data-vehicle-search
+        data-search-panel
+      >
+        <span
+          class="absolute top-0 left-6 h-0.5 w-16 bg-[var(--color-brand-orange)]"
+          aria-hidden="true"
+        >
+        </span>
+
+        <div class="grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-[1fr_1fr_1.4fr_auto] lg:items-end">
+          <label class="grid gap-1.5 text-sm font-semibold text-[var(--color-text-primary)]">
+            Marca
+            <span class="relative block">
+              <select
+                name="brand"
+                class="min-h-12 w-full appearance-none rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] px-4 pr-10 text-sm font-normal text-[var(--color-text-primary)] transition-colors duration-200 hover:border-[var(--color-border-strong)] focus:border-[var(--color-brand-orange)] focus:outline-none"
+                data-vehicle-brand
+              >
+                <option value="" selected>Todas las marcas</option>
+                {
+                  brands.map((brand) => (
+                    <option value={brand}>{brand}</option>
+                  ))
+                }
+              </select>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 20 20"
+                class="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-[var(--color-brand-orange)]"
+                fill="currentColor"
+              >
+                <path d="m5.5 7.5 4.5 4.5 4.5-4.5"></path>
+              </svg>
+            </span>
+          </label>
+
+          <label class="grid gap-1.5 text-sm font-semibold text-[var(--color-text-primary)]">
+            Modelo
+            <span class="relative block">
+              <select
+                name="model"
+                class="min-h-12 w-full appearance-none rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-bg-primary)] px-4 pr-10 text-sm font-normal text-[var(--color-text-primary)] transition-colors duration-200 hover:border-[var(--color-border-strong)] focus:border-[var(--color-brand-orange)] focus:outline-none"
+                data-vehicle-model
+              >
+                <option value="" selected>Todos los modelos</option>
+                {
+                  models.map((model) => (
+                    <option value={model}>{model}</option>
+                  ))
+                }
+              </select>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 20 20"
+                class="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-[var(--color-brand-orange)]"
+                fill="currentColor"
+              >
+                <path d="m5.5 7.5 4.5 4.5 4.5-4.5"></path>
+              </svg>
+            </span>
+          </label>
+
+          <label class="grid gap-1 text-sm font-semibold text-[var(--color-text-primary)]">
+            Presupuesto orientativo
+            <input
+              id="vehicle-budget"
+              type="range"
+              name="budget"
+              min={budgetMin}
+              max={budgetMax}
+              value={budgetMax}
+              step="500000"
+              aria-valuetext={`Presupuesto orientativo hasta ${formatVehiclePrice(budgetMax, 'ARS')}`}
+              class="budget-range w-full cursor-pointer"
+              data-vehicle-budget
+            />
+            <span
+              class="flex items-center justify-between gap-3 text-xs font-normal text-[var(--color-text-secondary)]"
+            >
+              <span>{formatVehiclePrice(budgetMin, 'ARS')}</span>
+              <output
+                for="vehicle-budget"
+                class="font-semibold text-[var(--color-text-primary)]"
+                data-vehicle-budget-output
+              >
+                {formatVehiclePrice(budgetMax, 'ARS')}
+              </output>
+            </span>
+            <span class="text-[0.6875rem] leading-4 font-normal text-white/45">
+              Rangos utilizados únicamente para esta demostración.
+            </span>
+          </label>
+
+          <Button
+            type="submit"
+            class="min-h-12 w-full whitespace-nowrap md:col-span-2 lg:col-span-1"
+          >
+            Ver opciones
+          </Button>
+        </div>
+      </form>
+    </div>
+  </Container>
+</section>
+
+<style>
+  @media (min-width: 48rem) {
+    .hero-media--left {
+      -webkit-mask-image: linear-gradient(
+        90deg,
+        #000 0%,
+        #000 62%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        90deg,
+        #000 0%,
+        #000 62%,
+        transparent 100%
+      );
+    }
+
+    .hero-media--right {
+      -webkit-mask-image: linear-gradient(
+        270deg,
+        #000 0%,
+        #000 62%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        270deg,
+        #000 0%,
+        #000 62%,
+        transparent 100%
+      );
+    }
+  }
+
+  .budget-range {
+    min-height: 2rem;
+    appearance: none;
+    background: transparent;
+  }
+
+  .budget-range::-webkit-slider-runnable-track {
+    height: 0.4rem;
+    border-radius: 999px;
+    background: linear-gradient(
+      90deg,
+      var(--color-brand-orange) 0 var(--budget-progress, 100%),
+      var(--color-brand-gray) var(--budget-progress, 100%) 100%
+    );
+  }
+
+  .budget-range::-webkit-slider-thumb {
+    width: 1.35rem;
+    height: 1.35rem;
+    margin-top: -0.475rem;
+    appearance: none;
+    border: 0.2rem solid var(--color-text-primary);
+    border-radius: 50%;
+    background: var(--color-brand-orange);
+    box-shadow: 0 0 0 0.25rem rgba(233, 87, 36, 0.18);
+    transition:
+      box-shadow var(--transition-fast) ease,
+      transform var(--transition-fast) var(--ease-premium);
+  }
+
+  .budget-range::-moz-range-track {
+    height: 0.4rem;
+    border-radius: 999px;
+    background: var(--color-brand-gray);
+  }
+
+  .budget-range::-moz-range-progress {
+    height: 0.4rem;
+    border-radius: 999px;
+    background: var(--color-brand-orange);
+  }
+
+  .budget-range::-moz-range-thumb {
+    width: 1rem;
+    height: 1rem;
+    border: 0.2rem solid var(--color-text-primary);
+    border-radius: 50%;
+    background: var(--color-brand-orange);
+    box-shadow: 0 0 0 0.25rem rgba(233, 87, 36, 0.18);
+    transition:
+      box-shadow var(--transition-fast) ease,
+      transform var(--transition-fast) var(--ease-premium);
+  }
+
+  .budget-range:focus-visible {
+    outline: none;
+  }
+
+  .budget-range:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 0.4rem rgba(233, 87, 36, 0.28);
+  }
+
+  .budget-range:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 0.4rem rgba(233, 87, 36, 0.28);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .budget-range:hover::-webkit-slider-thumb {
+      transform: scale(1.08);
+    }
+
+    .budget-range:hover::-moz-range-thumb {
+      transform: scale(1.08);
+    }
+  }
+</style>

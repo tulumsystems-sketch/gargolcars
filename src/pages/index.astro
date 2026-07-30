@@ -1,17 +1,52 @@
 ---
+import Footer from '../components/layout/Footer.astro';
+import Header from '../components/layout/Header.astro';
+import BuyingProcess from '../components/sections/BuyingProcess.astro';
+import ContactSection from '../components/sections/ContactSection.astro';
+import FinancingTradeIn from '../components/sections/FinancingTradeIn.astro';
+import FoundersSection from '../components/sections/FoundersSection.astro';
+import HeroSearch from '../components/sections/HeroSearch.astro';
+import VehicleCategories from '../components/sections/VehicleCategories.astro';
+import VehicleRequest from '../components/sections/VehicleRequest.astro';
+import VehicleShowcase from '../components/sections/VehicleShowcase.astro';
+import Button from '../components/ui/Button.astro';
+import { siteConfig } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { createWhatsAppUrl } from '../utils/vehicle';
 
+const mobileWhatsappUrl = createWhatsAppUrl(
+  siteConfig.contact.whatsapp.linkNumber,
+  'Hola, quiero hacer una consulta a Gargol Cars.',
+);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title={siteConfig.title} description={siteConfig.description}>
+  <Header />
+  <HeroSearch />
+  <VehicleShowcase />
+  <VehicleCategories />
+  <FinancingTradeIn />
+  <BuyingProcess />
+  <FoundersSection />
+  <VehicleRequest />
+  <ContactSection />
+  <Footer />
+
+  <Button
+    href={mobileWhatsappUrl}
+    class="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] left-4 z-50 min-h-14 border-white/15 shadow-[0_16px_44px_rgba(0,0,0,0.46)] md:hidden"
+    animationTarget="final-cta"
+  >
+    Consultar por WhatsApp
+  </Button>
+
+  <script>
+    import { initLandingAnimations } from '../scripts/animations';
+    import { initVehicleRequest } from '../scripts/vehicle-request';
+    import { initVehicleSearch } from '../scripts/vehicle-search';
+
+    initLandingAnimations();
+    initVehicleSearch();
+    initVehicleRequest();
+  </script>
+</BaseLayout>

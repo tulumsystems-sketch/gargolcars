@@ -1,0 +1,211 @@
+---
+import { siteConfig } from '../../config/site';
+import type { Vehicle } from '../../types/vehicle';
+import {
+  createVehicleWhatsAppMessage,
+  createWhatsAppUrl,
+  formatMileage,
+  formatVehiclePrice,
+  getStatusLabel,
+} from '../../utils/vehicle';
+import Button from './Button.astro';
+
+interface Props {
+  vehicle: Vehicle;
+}
+
+const { vehicle } = Astro.props;
+const isSold = vehicle.status === 'sold';
+const isMotorcycle = vehicle.category === 'motorcycle';
+const isPickup = vehicle.category === 'pickup';
+const secondaryImage = vehicle.gallery?.[0];
+const mileage = formatMileage(vehicle.mileage);
+const details = [
+  vehicle.year?.toString(),
+  mileage,
+  vehicle.transmission,
+  vehicle.fuel,
+].filter((detail): detail is string => Boolean(detail));
+const whatsappMessage = createVehicleWhatsAppMessage(vehicle);
+const whatsappUrl = createWhatsAppUrl(
+  siteConfig.contact.whatsapp.linkNumber,
+  whatsappMessage,
+);
+const displayedPrice = vehicle.priceIsTemporary
+  ? 'Consultar precio'
+  : formatVehiclePrice(vehicle.price, vehicle.currency);
+---
+
+<article
+  id={vehicle.id}
+  class:list={[
+    'vehicle-card group flex h-full flex-col overflow-hidden rounded-[var(--radius-editorial)] border bg-[var(--color-surface)]',
+    isSold
+      ? 'vehicle-card--sold border-white/20'
+      : 'border-[var(--color-border)]',
+  ]}
+>
+  <div
+    class:list={[
+      'vehicle-card__media relative overflow-hidden bg-[var(--color-bg-secondary)]',
+      isMotorcycle ? 'aspect-[3/4]' : 'aspect-[4/5]',
+    ]}
+  >
+    <img
+      src={vehicle.image}
+      alt={vehicle.imageAlt}
+      loading="lazy"
+      decoding="async"
+      class:list={[
+        'vehicle-card__primary h-full w-full object-cover',
+        isMotorcycle
+          ? 'object-[50%_57%]'
+          : isPickup
+            ? 'object-[50%_56%]'
+            : 'object-center',
+        isSold && 'saturate-[0.65]',
+      ]}
+    />
+    {
+      secondaryImage && (
+        <img
+          src={secondaryImage}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+          class:list={[
+            'vehicle-card__secondary absolute inset-0 h-full w-full object-cover opacity-0',
+            isMotorcycle
+              ? 'object-[50%_57%]'
+              : isPickup
+                ? 'object-[50%_56%]'
+                : 'object-center',
+            isSold && 'saturate-[0.65]',
+          ]}
+        />
+      )
+    }
+
+    <div
+      class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_42%,rgba(0,0,0,0.18)_60%,rgba(0,0,0,0.92)_100%)]"
+      aria-hidden="true"
+    >
+    </div>
+
+    <span
+      class:list={[
+        'absolute top-4 left-4 rounded-full border px-3 py-1.5 text-[0.68rem] font-bold tracking-[0.14em] uppercase backdrop-blur-md',
+        isSold
+          ? 'border-white/20 bg-black/55 text-white'
+          : 'border-[color:var(--color-brand-orange)]/70 bg-black/45 text-[#ff8a62]',
+      ]}
+    >
+      {getStatusLabel(vehicle.status)}
+    </span>
+
+    <div class="absolute right-0 bottom-0 left-0 p-5 sm:p-6">
+      <h3 class="text-[length:var(--font-size-card-title)] leading-tight font-bold tracking-[-0.03em] text-white">
+        {vehicle.brand} {vehicle.model}
+      </h3>
+      {
+        vehicle.version && (
+          <p class="mt-1 text-base font-medium text-white/75">{vehicle.version}</p>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="flex flex-1 flex-col p-5 sm:p-6">
+    <p class="text-lg font-bold tracking-[-0.015em] text-[var(--color-text-primary)]">
+      {displayedPrice}
+    </p>
+
+    {
+      details.length > 0 && (
+        <ul
+          class="vehicle-card__meta mt-4 flex flex-wrap gap-x-4 gap-y-2"
+          aria-label="Características confirmadas"
+        >
+          {details.map((detail) => (
+            <li class="relative text-xs font-medium tracking-[0.025em] text-[var(--color-text-secondary)]">
+              {detail}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      vehicle.description && (
+        <p class="vehicle-card__description mt-3 text-sm leading-6 text-[var(--color-text-secondary)]">
+          {vehicle.description}
+        </p>
+      )
+    }
+
+    <Button
+      href={whatsappUrl}
+      variant={isSold ? 'secondary' : 'primary'}
+      class="mt-auto min-h-12 w-full text-[0.9375rem]"
+    >
+      {isSold ? 'Consultar una similar' : 'Consultar unidad'}
+    </Button>
+  </div>
+</article>
+
+<style>
+  .vehicle-card__description {
+    display: -webkit-box;
+    min-height: 4.5rem;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .vehicle-card__meta li:not(:last-child)::after {
+    position: absolute;
+    top: 50%;
+    right: -0.55rem;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: var(--color-brand-orange);
+    content: "";
+    transform: translateY(-50%);
+  }
+
+  .vehicle-card,
+  .vehicle-card__primary {
+    transition:
+      transform var(--transition-base) var(--ease-premium),
+      border-color var(--transition-base) ease,
+      filter var(--transition-base) ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .vehicle-card__secondary {
+      transition: opacity 420ms var(--ease-premium);
+    }
+
+    .vehicle-card:hover {
+      border-color: var(--color-border-strong);
+      transform: translateY(-5px);
+    }
+
+    .vehicle-card:hover .vehicle-card__primary {
+      transform: scale(1.025);
+    }
+
+    .vehicle-card:hover .vehicle-card__secondary,
+    .vehicle-card:focus-within .vehicle-card__secondary {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vehicle-card__secondary {
+      transition-duration: 0.01ms;
+    }
+  }
+</style>

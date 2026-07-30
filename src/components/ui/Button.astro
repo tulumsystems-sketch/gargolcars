@@ -1,0 +1,65 @@
+---
+type ButtonVariant = 'primary' | 'secondary' | 'ghost';
+
+interface Props {
+  href?: string;
+  variant?: ButtonVariant;
+  class?: string;
+  type?: 'button' | 'submit' | 'reset';
+  animationTarget?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  class: className,
+  type = 'button',
+  animationTarget,
+} = Astro.props;
+
+const baseClasses =
+  'button-base inline-flex min-h-12 items-center justify-center rounded-[var(--radius)] px-5 py-3 text-sm font-semibold tracking-[0.025em] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[var(--color-brand-orange)]';
+
+const variantClasses: Record<ButtonVariant, string> = {
+  primary:
+    'border border-[var(--color-brand-orange)] bg-[var(--color-brand-orange)] text-white hover:border-[#ff7040] hover:bg-[#ff7040]',
+  secondary:
+    'border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-raised)]',
+  ghost:
+    'border border-transparent bg-transparent text-[var(--color-text-primary)] hover:border-[var(--color-border)] hover:bg-white/5',
+};
+
+const classes = [baseClasses, variantClasses[variant], className];
+---
+
+{
+  href ? (
+    <a href={href} class:list={classes} data-animation-target={animationTarget}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class:list={classes} data-animation-target={animationTarget}>
+      <slot />
+    </button>
+  )
+}
+
+<style>
+  .button-base {
+    transition:
+      transform var(--transition-fast) var(--ease-premium),
+      border-color var(--transition-fast) ease,
+      background-color var(--transition-fast) ease,
+      color var(--transition-fast) ease;
+  }
+
+  .button-base:active {
+    transform: translateY(1px) scale(0.99);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .button-base:hover {
+      transform: translateY(-2px);
+    }
+  }
+</style>
