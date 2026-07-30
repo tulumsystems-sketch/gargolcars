@@ -1,0 +1,46 @@
+---
+import { visualVehicles } from '../../data/visual-vehicles';
+import Container from '../ui/Container.astro';
+import VehicleVisualCard from '../ui/VehicleVisualCard.astro';
+---
+
+<section
+  id="vehiculos"
+  class="scroll-mt-20 bg-[var(--color-bg-secondary)] py-20 sm:py-24 lg:py-32"
+  aria-labelledby="vehicle-showcase-title"
+>
+  <Container>
+    <div class="max-w-3xl">
+      <p
+        class="text-xs font-bold tracking-[0.24em] text-[var(--color-brand-orange)] uppercase sm:text-sm"
+      >
+        Stock seleccionado
+      </p>
+      <h2
+        id="vehicle-showcase-title"
+        class="mt-4 text-3xl leading-tight font-bold text-balance text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl"
+      >
+        Conocé algunas de nuestras unidades
+      </h2>
+      <p
+        class="mt-5 max-w-2xl text-base leading-7 text-pretty text-[var(--color-text-secondary)] sm:text-lg"
+      >
+        Estamos preparando la información completa de cada vehículo. Muy pronto podrás
+        filtrar por marca, modelo y presupuesto.
+      </p>
+    </div>
+
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3 lg:gap-6">
+      {
+        visualVehicles.map((vehicle) => (
+          <VehicleVisualCard
+            id={vehicle.id}
+            cover={vehicle.cover}
+            secondaryImage={vehicle.gallery[0]}
+            temporaryLabel={vehicle.temporaryLabel}
+          />
+        ))
+      }
+    </div>
+  </Container>
+</section>

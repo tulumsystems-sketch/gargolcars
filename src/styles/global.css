@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+:root {
+  --color-bg-primary: #090a0b;
+  --color-bg-secondary: #0e1012;
+  --color-surface: #15181b;
+  --color-surface-raised: #1b1f23;
+  --color-text-primary: #f5f6f7;
+  --color-text-secondary: #a6abb0;
+  --color-brand-orange: #e95724;
+  --color-brand-gray: #5f6266;
+  --color-border: rgba(255, 255, 255, 0.11);
+  --radius: 0.75rem;
+  --content-max-width: 80rem;
+}
+
 *,
 *::before,
 *::after {
@@ -8,11 +22,14 @@
 
 html {
   scroll-behavior: smooth;
+  background: var(--color-bg-primary);
 }
 
 body {
   min-height: 100vh;
   margin: 0;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
   font-family:
     system-ui,
     -apple-system,
@@ -20,4 +37,24 @@ body {
     "Segoe UI",
     sans-serif;
   line-height: 1.5;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--color-brand-orange);
+  color: #fff;
+}
+
+:focus-visible {
+  scroll-margin-block: 6rem;
 }

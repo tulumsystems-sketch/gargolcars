@@ -1,0 +1,116 @@
+---
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+---
+
+<section
+  id="inicio"
+  class="relative isolate min-h-[calc(100svh-5rem)] scroll-mt-20 overflow-hidden border-b border-[var(--color-border)]"
+  aria-labelledby="hero-title"
+>
+  <div class="absolute inset-0 -z-30 bg-[var(--color-bg-primary)]"></div>
+
+  <div class="absolute inset-y-0 left-0 -z-20 hidden w-[46%] md:block">
+    <img
+      src="/auto-izquierda.jpg"
+      alt=""
+      width="1376"
+      height="1835"
+      aria-hidden="true"
+      class="h-full w-full object-cover object-center opacity-45"
+    />
+  </div>
+
+  <div class="absolute inset-0 -z-20 md:inset-y-0 md:right-0 md:left-auto md:w-[46%]">
+    <img
+      src="/auto-derecha.jpg"
+      alt=""
+      width="1376"
+      height="1835"
+      aria-hidden="true"
+      class="h-full w-full object-cover object-center opacity-30 md:opacity-45"
+    />
+  </div>
+
+  <div
+    class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(9,10,11,0.58)_0%,rgba(9,10,11,0.82)_62%,var(--color-bg-primary)_100%)] md:bg-[linear-gradient(90deg,rgba(9,10,11,0.5)_0%,rgba(9,10,11,0.96)_32%,rgba(9,10,11,0.96)_68%,rgba(9,10,11,0.5)_100%)]"
+  >
+  </div>
+
+  <Container class="flex min-h-[calc(100svh-5rem)] items-center py-16 sm:py-20 lg:py-24">
+    <div class="mx-auto w-full max-w-5xl text-center">
+      <p
+        class="mb-5 text-xs font-bold tracking-[0.28em] text-[var(--color-brand-orange)] uppercase sm:text-sm"
+      >
+        Gargol Cars
+      </p>
+      <h1
+        id="hero-title"
+        class="mx-auto max-w-4xl text-4xl leading-[1.05] font-bold text-balance text-[var(--color-text-primary)] sm:text-5xl lg:text-7xl"
+      >
+        Tenemos el vehículo que se adapta a vos
+      </h1>
+      <p
+        class="mx-auto mt-6 max-w-2xl text-base leading-7 text-pretty text-[var(--color-text-secondary)] sm:text-lg"
+      >
+        Explorá opciones según la marca, el modelo y tu presupuesto. Después podrás
+        consultar cada unidad directamente con nuestro equipo.
+      </p>
+
+      <form
+        class="mx-auto mt-10 max-w-4xl rounded-[calc(var(--radius)*1.5)] border border-[var(--color-border)] bg-[color:var(--color-surface)]/92 p-4 text-left shadow-2xl backdrop-blur-xl sm:p-6 lg:p-7"
+        aria-label="Búsqueda visual de vehículos"
+        data-vehicle-search
+      >
+        <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-[1fr_1fr_1.35fr_auto] lg:items-end">
+          <label class="grid gap-2 text-sm font-semibold text-[var(--color-text-primary)]">
+            Marca
+            <select
+              name="brand"
+              class="min-h-12 w-full rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-4 text-sm font-normal text-[var(--color-text-secondary)] focus:border-[var(--color-brand-orange)] focus:outline-none"
+              data-vehicle-brand
+            >
+              <option value="" selected>Seleccioná una marca</option>
+            </select>
+          </label>
+
+          <label class="grid gap-2 text-sm font-semibold text-[var(--color-text-primary)]">
+            Modelo
+            <select
+              name="model"
+              class="min-h-12 w-full rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-4 text-sm font-normal text-[var(--color-text-secondary)] focus:border-[var(--color-brand-orange)] focus:outline-none"
+              data-vehicle-model
+            >
+              <option value="" selected>Seleccioná un modelo</option>
+            </select>
+          </label>
+
+          <label class="grid gap-3 text-sm font-semibold text-[var(--color-text-primary)]">
+            Presupuesto
+            <input
+              type="range"
+              name="budget"
+              min="0"
+              max="100"
+              value="50"
+              aria-valuetext="Rango de presupuesto sin valores monetarios definidos"
+              class="h-3 w-full cursor-pointer accent-[var(--color-brand-orange)]"
+              data-vehicle-budget
+            />
+            <span
+              class="flex justify-between gap-3 text-xs font-normal text-[var(--color-text-secondary)]"
+              aria-hidden="true"
+            >
+              <span>Más accesible</span>
+              <span>Más premium</span>
+            </span>
+          </label>
+
+          <Button href="#vehiculos" class="w-full whitespace-nowrap md:col-span-2 lg:col-span-1">
+            Encontrar vehículos
+          </Button>
+        </div>
+      </form>
+    </div>
+  </Container>
+</section>

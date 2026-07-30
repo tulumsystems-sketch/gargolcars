@@ -1,0 +1,78 @@
+---
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+
+const navigation = [
+  { label: 'Inicio', href: '#inicio' },
+  { label: 'Vehículos', href: '#vehiculos' },
+  { label: 'Financiación', href: '#financiacion' },
+  { label: 'Nosotros', href: '#nosotros' },
+  { label: 'Contacto', href: '#contacto' },
+] as const;
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[color:var(--color-bg-primary)]/90 backdrop-blur-xl"
+>
+  <Container class="flex min-h-20 items-center justify-between gap-6">
+    <a
+      href="#inicio"
+      class="flex shrink-0 items-center rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-brand-orange)]"
+      aria-label="Gargol Cars, ir al inicio"
+    >
+      <img
+        src="/logo-transparente.png"
+        alt="Gargol Cars"
+        width="1080"
+        height="1080"
+        class="h-16 w-24 object-contain sm:w-28"
+      />
+    </a>
+
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="Navegación principal">
+      {
+        navigation.map(({ label, href }) => (
+          <a
+            href={href}
+            class="rounded-lg px-3 py-2 text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:bg-white/5 hover:text-[var(--color-text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-orange)]"
+          >
+            {label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="hidden lg:block">
+      <Button href="#contacto">WhatsApp</Button>
+    </div>
+
+    <details class="group relative lg:hidden">
+      <summary
+        class="flex min-h-11 cursor-pointer list-none items-center gap-2 rounded-[var(--radius)] border border-[var(--color-border)] px-4 py-2 text-sm font-semibold text-[var(--color-text-primary)] marker:content-none focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[var(--color-brand-orange)]"
+      >
+        <span>Menú</span>
+        <span aria-hidden="true" class="text-[var(--color-brand-orange)] group-open:rotate-45"
+          >+</span
+        >
+      </summary>
+
+      <div
+        class="absolute right-0 top-[calc(100%+0.75rem)] w-[min(19rem,calc(100vw-2rem))] rounded-[var(--radius)] border border-[var(--color-border)] bg-[var(--color-surface)] p-3 shadow-2xl"
+      >
+        <nav class="flex flex-col" aria-label="Navegación móvil">
+          {
+            navigation.map(({ label, href }) => (
+              <a
+                href={href}
+                class="rounded-lg px-4 py-3 text-sm font-medium text-[var(--color-text-secondary)] hover:bg-white/5 hover:text-[var(--color-text-primary)] focus-visible:outline-2 focus-visible:outline-[var(--color-brand-orange)]"
+              >
+                {label}
+              </a>
+            ))
+          }
+        </nav>
+        <Button href="#contacto" class="mt-3 w-full">WhatsApp</Button>
+      </div>
+    </details>
+  </Container>
+</header>
