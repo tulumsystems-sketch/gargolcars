@@ -29,7 +29,9 @@ export function formatVehiclePrice(
     style: 'currency',
     currency,
     maximumFractionDigits: 0,
-  }).format(price);
+  })
+    .format(price)
+    .replace(/\s/g, '');
 }
 
 export function formatMileage(mileage?: number): string | null {
@@ -52,10 +54,41 @@ export function getStatusLabel(status: VehicleStatus): string {
   return statusLabels[status];
 }
 
-export function createVehicleWhatsAppMessage(
-  vehicle: Pick<Vehicle, 'brand' | 'model'>,
+export function getVehicleDisplayName(
+  vehicle: Pick<Vehicle, 'brand' | 'model' | 'version' | 'year'>,
 ): string {
-  const vehicleName = `${vehicle.brand} ${vehicle.model}`.trim();
+  return [
+    vehicle.brand,
+    vehicle.model,
+    vehicle.version,
+    vehicle.year?.toString(),
+  ]
+    .filter((value): value is string => Boolean(value))
+    .join(' ');
+}
 
-  return `Hola, vi el ${vehicleName} en la web de Gargol Cars. ¿Sigue disponible?`;
+export function createVehicleWhatsAppMessage(
+  vehicle: Pick<
+    Vehicle,
+    'brand' | 'model' | 'version' | 'year' | 'status' | 'category'
+  >,
+): string {
+  const vehicleName = getVehicleDisplayName(vehicle);
+
+  if (vehicle.status === 'sold') {
+    return `Hola, vi la ${vehicleName} vendida en la web de Gargol Cars. ¿Tienen una unidad similar?`;
+  }
+
+  const article = vehicle.category === 'motorcycle' ? 'la' : 'el';
+
+  return `Hola, vi ${article} ${vehicleName} en la web de Gargol Cars. ¿Sigue disponible?`;
+}
+
+export function createWhatsAppUrl(
+  phoneNumber: string,
+  message: string,
+): string {
+  const digitsOnly = phoneNumber.replace(/\D/g, '');
+
+  return `https://wa.me/${digitsOnly}?text=${encodeURIComponent(message)}`;
 }

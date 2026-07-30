@@ -28,7 +28,7 @@ export const homeContent = {
   financingAndTradeIn: {
     title: 'Financiación y permuta',
     description:
-      '[Pendiente de validación] Confirmar disponibilidad, modalidades y condiciones antes de publicar.',
+      'Gargol Cars ofrece financiación y recibe permutas. Las modalidades y condiciones de financiación están pendientes de confirmación.',
     cta: 'Consultar opciones',
   },
   about: {

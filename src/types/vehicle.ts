@@ -14,11 +14,13 @@ export interface Vehicle {
   mileage?: number;
   price?: number;
   currency?: Currency;
+  priceIsTemporary?: boolean;
   category: VehicleCategory;
   transmission?: string;
   fuel?: string;
   image: string;
   imageAlt: string;
+  gallery?: string[];
   status: VehicleStatus;
   featured: boolean;
   description?: string;

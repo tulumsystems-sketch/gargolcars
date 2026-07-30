@@ -1,12 +1,50 @@
 ---
 import '../styles/global.css';
+import { siteConfig } from '../config/site';
 
 interface Props {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
 }
 
-const { title, description } = Astro.props;
+const {
+  title = siteConfig.title,
+  description = siteConfig.description,
+} = Astro.props;
+const canonicalUrl = siteConfig.url
+  ? new URL(Astro.url.pathname, siteConfig.url).toString()
+  : undefined;
+const socialImageUrl = siteConfig.url
+  ? new URL(siteConfig.socialImage, siteConfig.url).toString()
+  : siteConfig.socialImage;
+const robots = siteConfig.isDemo ? 'noindex, nofollow' : 'index, follow';
+const localBusinessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'AutomotiveBusiness',
+  name: siteConfig.name,
+  description: siteConfig.description,
+  ...(siteConfig.url ? { url: siteConfig.url } : {}),
+  telephone: siteConfig.contact.whatsapp.internationalNumber,
+  sameAs: [siteConfig.contact.instagram.value],
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: siteConfig.contact.address.streetAddress,
+    postalCode: siteConfig.contact.address.postalCode,
+    addressLocality: siteConfig.contact.address.locality,
+    addressRegion: siteConfig.contact.address.region,
+    addressCountry: siteConfig.contact.address.country,
+  },
+  openingHoursSpecification:
+    siteConfig.contact.businessHours.openingHours.map(
+      ({ days, opens, closes }) => ({
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: days,
+        opens,
+        closes,
+      }),
+    ),
+  knowsAbout: ['Autos', 'Pickups', 'Motos', 'Financiación', 'Permutas'],
+};
 ---
 
 <!doctype html>
@@ -15,13 +53,36 @@ const { title, description } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <meta name="theme-color" content={siteConfig.themeColor} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={siteConfig.locale} />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta
+      property="og:image:alt"
+      content="Vehículo publicado por Gargol Cars"
+    />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/images/brand/isotipo.png" />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     <title>{title}</title>
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(localBusinessSchema)}
+    />
   </head>
   <body>
-    <!-- Header: pendiente de implementación. -->
     <main>
       <slot />
     </main>
-    <!-- Footer: pendiente de implementación. -->
   </body>
 </html>

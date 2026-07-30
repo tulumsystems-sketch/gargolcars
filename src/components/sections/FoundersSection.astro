@@ -1,0 +1,74 @@
+---
+import Container from '../ui/Container.astro';
+---
+
+<section
+  id="nosotros"
+  class="surface-black relative isolate scroll-mt-[var(--header-height)] overflow-hidden py-[clamp(6rem,12vw,11rem)]"
+  aria-labelledby="founders-title"
+>
+  <span class="section-separator" aria-hidden="true"></span>
+  <img
+    src="/images/brand/isotipo-blanco.png"
+    alt=""
+    width="1080"
+    height="1080"
+    loading="lazy"
+    aria-hidden="true"
+    class="pointer-events-none absolute -top-24 -left-32 -z-10 w-[32rem] max-w-none object-contain opacity-[0.025] sm:-left-20 lg:top-1/2 lg:-left-36 lg:w-[46rem] lg:-translate-y-1/2"
+  />
+  <Container>
+    <div class="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:gap-16">
+      <div class="relative z-10" data-section-heading>
+        <p class="section-eyebrow">
+          Conocé Gargol Cars
+        </p>
+        <h2
+          id="founders-title"
+          class="section-title max-w-[12ch]"
+        >
+          Personas reales detrás de cada operación
+        </h2>
+        <p class="section-lead max-w-lg">
+          En este video, los dueños de Gargol Cars cuentan quiénes son y cómo trabajan
+          para acompañar a cada persona en la búsqueda de su vehículo.
+        </p>
+
+        <div
+          class="mt-8 max-w-lg border-l-2 border-[var(--color-brand-orange)] py-1 pl-5"
+        >
+          <p class="meta-label text-[var(--color-text-primary)]">
+            Resumen del video
+          </p>
+          <p class="mt-2 text-sm leading-6 text-[var(--color-text-secondary)]">
+            Los dueños presentan Gargol Cars y explican su forma de acompañar la búsqueda
+            de cada vehículo.
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="overflow-hidden rounded-[var(--radius-editorial)] border border-white/[0.14] bg-black shadow-[0_32px_100px_rgba(0,0,0,0.48)] lg:-mr-8"
+        data-video-reveal
+      >
+        <!-- Poster pendiente: /images/owners/founders-poster.jpg aún no está disponible. -->
+        <video
+          controls
+          playsinline
+          preload="metadata"
+          class="max-h-[82svh] w-full bg-black object-contain"
+          aria-describedby="founders-video-summary"
+        >
+          <source src="/videos/founders.mp4" type="video/mp4" />
+          Tu navegador no puede reproducir este video.
+        </video>
+        <p
+          id="founders-video-summary"
+          class="border-t border-white/10 bg-[var(--color-surface-soft)] px-5 py-4 text-sm leading-6 text-[var(--color-text-secondary)] sm:px-6"
+        >
+          Presentación de los dueños de Gargol Cars sobre quiénes son y cómo trabajan.
+        </p>
+      </div>
+    </div>
+  </Container>
+</section>

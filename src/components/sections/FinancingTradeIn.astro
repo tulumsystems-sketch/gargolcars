@@ -1,0 +1,80 @@
+---
+import { siteConfig } from '../../config/site';
+import { createWhatsAppUrl } from '../../utils/vehicle';
+import Button from '../ui/Button.astro';
+import Container from '../ui/Container.astro';
+
+const consultationUrl = createWhatsAppUrl(
+  siteConfig.contact.whatsapp.linkNumber,
+  'Hola, quiero consultar las opciones disponibles de financiación y permuta.',
+);
+
+const proposals = [
+  {
+    number: '01',
+    title: 'Financiación',
+    text: 'Consultá las alternativas disponibles para encontrar una opción que se adapte a tu compra.',
+  },
+  {
+    number: '02',
+    title: 'Permutas',
+    text: 'Podés presentar tu vehículo actual para evaluar su entrega como parte de pago.',
+  },
+] as const;
+---
+
+<section
+  id="financiacion"
+  class="surface-warm section-atmosphere relative scroll-mt-[var(--header-height)] overflow-hidden py-[var(--section-space)]"
+  aria-labelledby="financing-title"
+>
+  <span class="section-separator" aria-hidden="true"></span>
+  <Container class="relative z-10">
+    <div class="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-20">
+      <div class="lg:sticky lg:top-[calc(var(--header-height)+2rem)]" data-section-heading>
+        <p class="section-eyebrow">
+          Opciones de compra
+        </p>
+        <h2
+          id="financing-title"
+          class="section-title"
+        >
+          Financiación y permutas
+        </h2>
+        <p class="section-lead">
+          Las condiciones se evalúan según cada operación. Consultanos para conocer las
+          alternativas disponibles.
+        </p>
+        <Button href={consultationUrl} class="mt-7 min-h-12 w-full sm:w-auto">
+          Consultar opciones
+        </Button>
+      </div>
+
+      <div class="border-y border-[var(--color-border)]">
+        {
+          proposals.map((proposal, index) => (
+            <article
+              class:list={[
+                'grid grid-cols-[auto_1fr] gap-5 py-7 sm:gap-8 sm:py-9',
+                index === 0 && 'border-b border-[var(--color-border)]',
+                index === 1 && 'lg:ml-12',
+              ]}
+            >
+              <p class="text-5xl leading-none font-bold tracking-[-0.06em] text-[var(--color-brand-orange)] opacity-45 sm:text-6xl">
+                {proposal.number}
+              </p>
+              <div>
+                <h3 class="text-2xl font-bold tracking-[-0.025em] text-[var(--color-text-primary)] sm:text-3xl">
+                  {proposal.title}
+                </h3>
+                <p class="mt-3 max-w-lg text-base leading-7 text-[var(--color-text-secondary)]">
+                  {proposal.text}
+                </p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </Container>
+</section>
